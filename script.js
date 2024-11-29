@@ -223,8 +223,8 @@ ctx.stroke();
 
   // Отрисовка счета
   ctx.fillStyle = 'black';
-  ctx.font = "20px 'Pixelify Sans', sans-serif";  // Пиксельный шрифт
-  ctx.fillText(`Score: ${score}`, 10, 30);
+  ctx.font = "24px 'Handjet', sans-serif";  // Пиксельный шрифт
+  ctx.fillText(`Отрицательный рост: ${score}`, 10, 30);
 }
 
 // Обработчики кнопок
