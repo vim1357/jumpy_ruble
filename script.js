@@ -93,8 +93,24 @@ function jump() {
   jumpSound.play(); // Воспроизведение звука прыжка
 }
 
+// Обработчик для пробела
 window.addEventListener('keydown', (e) => {
   if (e.code === 'Space' && isGameRunning) {
+    jump();
+  }
+});
+
+// Обработчик для клика мыши (для ПК)
+canvas.addEventListener('click', (e) => {
+  if (isGameRunning) {
+    jump();
+  }
+});
+
+// Обработчик для касания экрана (для мобильных устройств)
+canvas.addEventListener('touchstart', (e) => {
+  e.preventDefault();  // Предотвратить стандартное поведение для мобильных устройств
+  if (isGameRunning) {
     jump();
   }
 });
