@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flappy Bird</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <audio id="jump-sound" src="jump.mp3" preload="auto"></audio>
+
+
+  <audio id="background-audio" loop autoplay>
+    <source src="coinsong.mp3" type="audio/mp3">
+    Ваш браузер не поддерживает элемент audio.
+  </audio>
+
+  <div id="start-screen" class="screen">
+    <h1>Jumpy Ruble</h1>
+    <button id="start-button">Начать игру</button>
+    <button id="donate-button">Задонатить</button>
+  </div>
+  
+  <div id="game-screen" class="screen hidden">
+    <canvas id="game-canvas"></canvas>
+  </div>
+  
+  <div id="end-screen" class="screen hidden">
+    <p>Приплыли...</p>
+    <p>Счет: <span id="score">0</span></p>
+    <button id="retry-button">Играть снова</button>
+    <button id="donate-button-end">Задонатить</button>
+  </div>
+  
+  <script src="script.js"></script>
+</body>
+</html>
