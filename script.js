@@ -22,16 +22,16 @@ window.addEventListener('load', () => {
 });
 
 // Настройки игры
-const gravity = 0.4;
-const jumpStrength = -10;
-const birdSize = 32;
+const gravity = 0.35;
+const jumpStrength = -8;
+const birdSize = 40;
 const pipeWidth = 50;
 const pipeGap = 200; // Увеличенное расстояние между трубами
 const pipeSpeed = 2;
-let bird = { x: 150, y: 150, width: birdSize, height: birdSize, velocity: 0 };
+let bird = { x: 200, y: 150, width: birdSize, height: birdSize, velocity: 0 };
 let pipes = [];
 let trail = []; // Хвост птицы
-const trailMaxLength = 200; // Максимальная длина хвоста
+const trailMaxLength = 400; // Максимальная длина хвоста
 let score = 0;
 let isGameRunning = false;
 let gameInterval;
@@ -48,9 +48,9 @@ pipeImg.onload = () => {
   // Создаем паттерн из изображения
   const tempCanvas = document.createElement("canvas");
   const tempCtx = tempCanvas.getContext("2d");
-  tempCanvas.width = pipeImg.width;
-  tempCanvas.height = pipeImg.height;
-  tempCtx.drawImage(pipeImg, 0, 0);
+  tempCanvas.width = pipeImg.width / 16;
+  tempCanvas.height = pipeImg.height / 16;
+  tempCtx.drawImage(pipeImg, 0, 0, tempCanvas.width, tempCanvas.height);
   pipePattern = ctx.createPattern(tempCanvas, "repeat");
 };
 
@@ -67,7 +67,7 @@ function startGame() {
   backgroundAudio.volume = 0.2; // Устанавливаем громкость на 50%
   backgroundAudio.play(); // Запустить аудио
 
-  bird.y = canvas.height / 2;
+  bird.y = canvas.height / 3;
   bird.velocity = 0;
   pipes = [];
   trail = [];
@@ -76,7 +76,7 @@ function startGame() {
   showScreen(gameScreen);
   
   // Фиксированная частота кадров (например, 60 FPS)
-  gameInterval = setInterval(gameLoop, 1000 / 60); 
+  gameInterval = setInterval(gameLoop, 1000 / 80); 
 }
 
 // Закончить игру
@@ -125,7 +125,7 @@ function showScreen(screen) {
 function generatePipes() {
   const pipeHeight = Math.random() * (canvas.height - pipeGap - 50) + 25;
   // Мы создаем новые трубы заранее, сразу за экраном
-  pipes.push({ x: canvas.width + pipeWidth, y: pipeHeight, passed: false });
+  pipes.push({ x: canvas.width, y: pipeHeight, passed: false });
 }
 
 // Основной игровой цикл
@@ -155,15 +155,22 @@ function gameLoop() {
     trail[i].x -= pipeSpeed;
   }
 
-  // Отрисовка хвоста
-  ctx.strokeStyle = "orange";
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  for (let i = 0; i < trail.length - 1; i++) {
-    ctx.moveTo(trail[i].x, trail[i].y);
-    ctx.lineTo(trail[i + 1].x, trail[i + 1].y);
-  }
-  ctx.stroke();
+// Отрисовка хвоста (ломаная линия)
+ctx.strokeStyle = "orange";
+ctx.lineWidth = 2;
+ctx.setLineDash([]);  // Отключаем сглаживание (антиалиасинг)
+ctx.beginPath();
+
+// Начальная точка хвоста
+ctx.moveTo(trail[0].x, trail[0].y);
+
+// Рисуем ломаную линию по точкам
+for (let i = 1; i < trail.length; i++) {
+  ctx.lineTo(trail[i].x, trail[i].y);
+}
+
+ctx.stroke();
+
 
   // Генерация труб только, если последняя труба ушла за экран
   if (pipes.length === 0 || pipes[pipes.length - 1].x < canvas.width - 300) {
@@ -190,10 +197,6 @@ function gameLoop() {
       pipe.passed = true; // Отмечаем, что птичка прошла через трубу
     }
 
-    // Удаление труб, когда они покидают экран
-    if (pipe.x + pipeWidth < 0) {
-      pipes.splice(index, 1);
-    }
   });
 
   // Отрисовка труб
@@ -227,3 +230,5 @@ function gameLoop() {
 // Обработчики кнопок
 startButton.addEventListener('click', startGame);
 retryButton.addEventListener('click', startGame);
+
+
