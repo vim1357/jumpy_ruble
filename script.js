@@ -34,6 +34,7 @@ let trail = []; // Хвост птицы
 const trailMaxLength = 200; // Максимальная длина хвоста
 let score = 0;
 let isGameRunning = false;
+let gameInterval;
 
 // Изображения
 const birdImg = new Image();
@@ -73,12 +74,15 @@ function startGame() {
   score = 0;
   isGameRunning = true;
   showScreen(gameScreen);
-  gameLoop();
+  
+  // Фиксированная частота кадров (например, 60 FPS)
+  gameInterval = setInterval(gameLoop, 1000 / 60); 
 }
 
 // Закончить игру
 function endGame() {
   isGameRunning = false;
+  clearInterval(gameInterval); // Остановить игровой цикл
   scoreDisplay.textContent = score;
   showScreen(endScreen);
 }
@@ -88,17 +92,10 @@ function jump() {
   bird.velocity = jumpStrength;
   jumpSound.play(); // Воспроизведение звука прыжка
 }
+
 window.addEventListener('keydown', (e) => {
   if (e.code === 'Space' && isGameRunning) {
     jump();
-  }
-});
-
-// Для мобильных устройств (прикосновение к экрану)
-window.addEventListener('touchstart', (e) => {
-  if (isGameRunning) {
-    jump();
-    e.preventDefault(); // Предотвращаем стандартное поведение (например, скроллинг экрана)
   }
 });
 
@@ -126,10 +123,10 @@ function gameLoop() {
   bird.y += bird.velocity;
 
   // Проверка столкновений
-if (bird.y + bird.height > canvas.height) { // Птица не должна выходить за нижнюю границу
-  endGame();
-  return;
-}
+  if (bird.y + bird.height > canvas.height) { // Птица не должна выходить за нижнюю границу
+    endGame();
+    return;
+  }
 
   // Обновление хвоста
   trail.push({ x: bird.x + bird.width / 2, y: bird.y + bird.height / 2 });
@@ -178,7 +175,9 @@ if (bird.y + bird.height > canvas.height) { // Птица не должна вы
     }
 
     // Удаление труб, когда они покидают экран
-   
+    if (pipe.x + pipeWidth < 0) {
+      pipes.splice(index, 1);
+    }
   });
 
   // Отрисовка труб
@@ -207,8 +206,6 @@ if (bird.y + bird.height > canvas.height) { // Птица не должна вы
   ctx.fillStyle = 'black';
   ctx.font = "20px 'Pixelify Sans', sans-serif";  // Пиксельный шрифт
   ctx.fillText(`Score: ${score}`, 10, 30);
-
-  requestAnimationFrame(gameLoop);
 }
 
 // Обработчики кнопок
