@@ -94,6 +94,14 @@ window.addEventListener('keydown', (e) => {
   }
 });
 
+// Для мобильных устройств (прикосновение к экрану)
+window.addEventListener('touchstart', (e) => {
+  if (isGameRunning) {
+    jump();
+    e.preventDefault(); // Предотвращаем стандартное поведение (например, скроллинг экрана)
+  }
+});
+
 // Показать экран
 function showScreen(screen) {
   document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
