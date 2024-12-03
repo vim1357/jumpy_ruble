@@ -237,7 +237,7 @@ const donateButtonEnd = document.getElementById('donate-button-end');
 
 // Функция для показа кликабельной ссылки
 function showDonateMessage() {
-  if (confirm("Спасибо, что хочешь поддержать проект! Открыть Telegram?")) {
+  if (confirm("Спасибо, что хочешь поддержать проект! Напиши мне в Telegram, и я скину номер карты или криптокошелька. Открыть Telegram?")) {
     window.open("https://t.me/odokienkoan", "_blank");
   }
 }
