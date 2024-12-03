@@ -231,4 +231,15 @@ ctx.stroke();
 startButton.addEventListener('click', startGame);
 retryButton.addEventListener('click', startGame);
 
+// Добавьте этот код в самый конец файла:
+const donateButtonStart = document.getElementById('donate-button');
+const donateButtonEnd = document.getElementById('donate-button-end');
+
+function showDonateMessage() {
+  alert("Спасибо, что хочешь поддержать проект! Просто напиши мне в телеграм t.me/odokienkoan, и я предложу тебе удобный формат");
+}
+
+donateButtonStart.addEventListener('click', showDonateMessage);
+donateButtonEnd.addEventListener('click', showDonateMessage);
+
 
